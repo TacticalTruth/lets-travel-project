@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 
@@ -11,6 +12,11 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// Set up Mongoose connection
+mongoose.connect('mongodb+srv://lets_travel_admin:AdminPassword123@hotelproject.wdxvjub.mongodb.net/?retryWrites=true&w=majority');
+mongoose.Promise = global.Promise;
+mongoose.connection.on('error', (error) => console.error(error.message));
 
 app.use(logger('dev'));
 app.use(express.json());

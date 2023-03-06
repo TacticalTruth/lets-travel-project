@@ -1,13 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Hotel Site' });
-});
+// require controllers:
+const hotelController = require('../controllers/hotelController.js')
 
-router.get('/all', function(req, res){
-  res.render('all_hotels', {title: 'All Hotels'});
-});
+/* GET home page. */
+router.get('/', hotelController.homePage);
+
+router.get('/all', hotelController.listAllHotels);
+
+// Admin routes:
+router.get('/admin', hotelController.adminPage);
+router.get('/admin/add', hotelController.createHotelGet);
 
 module.exports = router;
