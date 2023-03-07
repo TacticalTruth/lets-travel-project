@@ -12,6 +12,10 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+app.use((req, res, next) =>{
+  res.locals.url = req.path
+  next();
+});
 
 // Set up Mongoose connection
 mongoose.connect('mongodb+srv://lets_travel_admin:AdminPassword123@hotelproject.wdxvjub.mongodb.net/?retryWrites=true&w=majority');
