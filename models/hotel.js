@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const hotelSchema = new mongoose.Schema({
-    hotel_name:{
+    hotel_name: {
         type: String,
         required: 'Hotel Name is required.',
         max: 32,
@@ -12,7 +12,7 @@ const hotelSchema = new mongoose.Schema({
         trim: true
     },
     image: String,
-    star_rating:{
+    star_rating: {
         type: Number,
         required: "Hotel star rating is required.",
         max: 5
@@ -22,15 +22,15 @@ const hotelSchema = new mongoose.Schema({
         required: 'Country is required.',
         trim: true
     },
-    cost_per_night:{
+    cost_per_night: {
         type: Number,
-        required: "Hotel cost is required."
+        required: "Cost per night is required."
     },
-    available:{
+    available: {
         type: Boolean,
         required: "Availability is required."
     }
 });
 
 // Export model
-module.export = mongoose.model('Hotel', hotelSchema);
+module.exports = mongoose.model('Hotel', hotelSchema);
