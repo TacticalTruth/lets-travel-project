@@ -2,7 +2,8 @@ mixin hotel(hotel)
     .hotel
         .hotel_img
             a(href=`/all/${hotel._id}`)
-                img(src=`/images/hotels/${hotel.image}`, alt="Hotel 1")
+                //- img(src=`/images/hotels/${hotel.image}`, alt="Hotel image")
+                img(src=`http://res.cloudinary.com/dbgzdr7er/image/upload/${hotel.image}.jpg`, alt="Hotel Image")
         .hotel_info
             a(href=`/all/${hotel._id}`)
                 h3= hotel.hotel_name

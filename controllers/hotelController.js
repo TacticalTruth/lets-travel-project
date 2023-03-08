@@ -1,4 +1,28 @@
 const Hotel = require('../models/hotel.js');
+const cloudinary = require('cloudinary');
+const multer = require('multer');
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+})
+const storage = multer.diskStorage({});
+const upload = multer({storage});
+exports.upload = upload.single('image');
+exports.pushToCloudinary = (req, res, next) => {
+    if(req.file){
+        cloudinary.uploader.upload(req.file.path)
+        .then((result)=>{
+            req.body.image = result.public_id;
+            next();
+        })
+        .catch(() =>{
+            res.redirect('/admin/add');
+        })
+    } else {
+        next();
+    }
+}
 
 // exports.homePage = (req, res) => {
 //     res.render('index', { title: 'Hotel Site' });
@@ -25,15 +49,16 @@ exports.listAllCountries = async (req, res, next) => {
 
 exports.homePageFilters = async (req, res, next) => {
     try {
-        const hotels = await Hotel.aggregate([
+        const hotels = Hotel.aggregate([
             {$match:{available: true}},
             {$sample:{size: 9}},
         ]);
-        const countries = await Hotel.aggregate([
+        const countries = Hotel.aggregate([
             {$group:{_id:'$country'}},
             {$sample:{size:9}}
         ]);
-        res.render('index',{countries, hotels,});
+        const [filteredCountries, filteredHotels] = await Promise.all([countries, hotels]);
+        res.render('index',{filteredCountries, filteredHotels,});
     } catch(error) {
         next(error)
     }
@@ -139,6 +164,20 @@ exports.hotelsByCountry = async (req, res, next) => {
         const countryParam = req.params.country;
         const countryList = await Hotel.find({country: countryParam});
         res.render('hotels_by_country', {title: `Browse by country: ${countryParam}`, countryList})
+    } catch(error){
+        next(error)
+    }
+}
+
+exports.searchResults = async (req, res, next) => {
+    try{
+        const searchQuery = req.body;
+        const parsedStars = parseInt(searchQuery.stars)
+        const searchData = await Hotel.aggregate([
+            {$match: {$text: {$search: `\"${searchQuery.destination}\"`}}},
+            {$match: {available: true, star_rating: {$gte: parsedStars}}}
+        ])
+        res.json(searchData)
     } catch(error){
         next(error)
     }

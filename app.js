@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -18,7 +19,7 @@ app.use((req, res, next) =>{
 });
 
 // Set up Mongoose connection
-mongoose.connect('mongodb+srv://lets_travel_admin:AdminPassword123@hotelproject.wdxvjub.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect(process.env.DB);
 mongoose.Promise = global.Promise;
 mongoose.connection.on('error', (error) => console.error(error.message));
 
