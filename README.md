@@ -1,4 +1,3 @@
 # lets-travel-project
-frontend and backend practice project
-
-made following a Chris Dixon Nodejs/Express tutorial
+Web Development practice
+made following a Chris Dixon Nodejs/Express tutorial on Skill Share
